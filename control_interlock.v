@@ -1,7 +1,4 @@
-module control_interlock(clock,
-                         reset,
-                         
-                         id_exe_regWrite, //write enable
+module control_interlock(id_exe_regWrite, //write enable
                          id_exe_write_reg, //write rgister
                          exe_mem_regWrite,
                          exe_mem_write_reg,
@@ -14,9 +11,6 @@ module control_interlock(clock,
                          
                          stall
 );
-input clock;
-input reset;
-
 input id_exe_regWrite;
 input exe_mem_regWrite;
 input mem_wb_regWrite;
@@ -28,7 +22,7 @@ input[4:0] if_id_read_reg1;
 input[4:0] if_id_read_reg2;
 input[6:0] if_id_opcode;
 
-output reg stall;
+output stall;
 
 localparam [6:0]R_TYPE  = 7'b0110011,
                 I_TYPE  = 7'b0010011,
@@ -49,37 +43,13 @@ wire reg2Read;
 assign reg1Read = ((if_id_opcode == R_TYPE) | (if_id_opcode == I_TYPE) | (if_id_opcode == STORE) | (if_id_opcode == LOAD) | (if_id_opcode == BRANCH) | (if_id_opcode == JALR)) ? 1:0;
 assign reg2Read = ((if_id_opcode == R_TYPE) | (if_id_opcode == STORE) | (if_id_opcode == BRANCH)) ? 1:0;
 
-always @ (posedge clock) begin
-if(~reset) begin
-  //READ after WRITE data hazard
-  if((reg1Read & id_exe_regWrite) & (if_id_read_reg1 == id_exe_write_reg)) begin
-    stall = 1;
-  end
-  
-  else if((reg1Read & exe_mem_regWrite) & (if_id_read_reg1 == exe_mem_write_reg)) begin
-    stall = 1;
-  end
-  
-  else if((reg1Read & mem_wb_regWrite) & (if_id_read_reg1 == mem_wb_write_reg)) begin
-    stall = 1;
-  end
-  
-  else if((reg2Read & id_exe_regWrite) & (if_id_read_reg1 == id_exe_write_reg)) begin
-    stall = 1;
-  end
-  
-  else if((reg2Read & exe_mem_regWrite) & (if_id_read_reg1 == exe_mem_write_reg)) begin
-    stall = 1;
-  end
-  
-  else if((reg2Read & mem_wb_regWrite) & (if_id_read_reg1 == mem_wb_write_reg)) begin
-    stall = 1;
-  end
-  
-  else begin
-    stall = 0;
-  end
-end
-end
+
+//READ after WRITE data hazard
+assign stall = (((reg1Read & id_exe_regWrite) & (if_id_read_reg1 == id_exe_write_reg)) |
+               ((reg1Read & exe_mem_regWrite) & (if_id_read_reg1 == exe_mem_write_reg)) |
+               ((reg1Read & mem_wb_regWrite) & (if_id_read_reg1 == mem_wb_write_reg)) |
+               ((reg2Read & id_exe_regWrite) & (if_id_read_reg1 == id_exe_write_reg)) |
+               ((reg2Read & exe_mem_regWrite) & (if_id_read_reg1 == exe_mem_write_reg)) |
+               ((reg2Read & mem_wb_regWrite) & (if_id_read_reg1 == mem_wb_write_reg)))? 1:0;
 
 endmodule
