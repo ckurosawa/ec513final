@@ -76,8 +76,8 @@ module tb_control_interlock();
       
     repeat (1) @ (posedge clock);
     id_exe_regWrite <= 0;
-    exe_wb_regWrite <= 1;
-    exe_wb_write_reg <= 5'b01010;
+    exe_mem_regWrite <= 1;
+    exe_mem_write_reg <= 5'b01010;
     if_id_opcode <= BRANCH;
     if_id_read_reg1 <= 5'b00010;
     if_id_read_reg2 <= 5'b01010;

@@ -48,8 +48,8 @@ assign reg2Read = ((if_id_opcode == R_TYPE) | (if_id_opcode == STORE) | (if_id_o
 assign stall = (((reg1Read & id_exe_regWrite) & (if_id_read_reg1 == id_exe_write_reg)) |
                ((reg1Read & exe_mem_regWrite) & (if_id_read_reg1 == exe_mem_write_reg)) |
                ((reg1Read & mem_wb_regWrite) & (if_id_read_reg1 == mem_wb_write_reg)) |
-               ((reg2Read & id_exe_regWrite) & (if_id_read_reg1 == id_exe_write_reg)) |
-               ((reg2Read & exe_mem_regWrite) & (if_id_read_reg1 == exe_mem_write_reg)) |
-               ((reg2Read & mem_wb_regWrite) & (if_id_read_reg1 == mem_wb_write_reg)))? 1:0;
+               ((reg2Read & id_exe_regWrite) & (if_id_read_reg2 == id_exe_write_reg)) |
+               ((reg2Read & exe_mem_regWrite) & (if_id_read_reg2 == exe_mem_write_reg)) |
+               ((reg2Read & mem_wb_regWrite) & (if_id_read_reg2 == mem_wb_write_reg)))? 1:0;
 
 endmodule
