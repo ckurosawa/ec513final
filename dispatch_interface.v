@@ -1,5 +1,5 @@
 (* ram_style = "block" *)
-module dispatch_interface #(parameter CORE = 0, DATA_WIDTH = 32, INDEX_WIDTH = 8, VALID_BIT = 1)(
+module dispatch_interface #(parameter CORE = 0, DATA_WIDTH = 32, INDEX_WIDTH = 3)(
   clock,
   reset,
   read,
@@ -8,7 +8,7 @@ module dispatch_interface #(parameter CORE = 0, DATA_WIDTH = 32, INDEX_WIDTH = 8
   in_data,
   out_address,
   out_data,
-  report  
+  report
 );
 
 input clock;
