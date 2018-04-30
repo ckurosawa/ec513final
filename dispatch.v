@@ -22,10 +22,6 @@ module dispatch_unit #(parameter CORE = 0, DATA_WIDTH = 32, INDEX_WIDTH = 3)(
 reg[31:0] queue_top;
 reg[31:0] queue_bot;
 
-wire[4:0] ins_dest;
-wire[4:0] ins_src1;
-wire[4:0] ins_src2;
-
 //Instruction status
 //FORMAT:[ISSUE:READ:EX:WB]  -- index corresponds to depth
 reg[3:0] ins_stat[7:0];
